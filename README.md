@@ -1,2 +1,2 @@
 # Password Manager
-# by Alexia Niculae
+by Alexia Niculae

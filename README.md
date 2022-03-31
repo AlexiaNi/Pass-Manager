@@ -1,3 +1,6 @@
+    #Bunny Safe Password Manager
+    by Niculae Alexia
+    
     Password Manager-keeping your passwords safe and easy to access
     Copyright (C) <2022>  <Niculae Alexia>
 

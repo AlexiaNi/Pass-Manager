@@ -107,6 +107,11 @@ class Frame_Login(tk.Frame):
         button_register.pack()
         button_exit2 = tk.Button(self, text="Exit", padx=52, pady=10, font=controller.button_font, command=exit_2)
         button_exit2.pack()
+        def callback2():
+            webbrowser.open_new("https://eww.pass.panasonic.co.jp/pro-av/support/content/download/EN/user/GPLLGPL.pdf")
+
+        button_license = tk.Button(self, text="License", command=callback2)
+        button_license.pack()
 
 
 class Frame_Register(tk.Frame):
@@ -516,5 +521,6 @@ if __name__ == "__main__":
     app.iconbitmap('bunny.ico')
     app.geometry('750x500')
     app.resizable(False, False)
+    print("<Password Manager>  Copyright (C) <2022>  <Alexia Niculae> This program comes with ABSOLUTELY NO WARRANTY; for details click the About License on the home screen")
     app.mainloop()
 

@@ -1,4 +1,4 @@
-    #Bunny Safe Password Manager
+    Bunny Safe Password Manager
     by Niculae Alexia
     
     Password Manager-keeping your passwords safe and easy to access

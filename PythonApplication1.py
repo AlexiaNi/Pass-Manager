@@ -7,9 +7,10 @@ from tkinter import messagebox
 from tkinter.ttk import *
 import sqlite3
 from PIL import *
-from configparser import ConfigParser
+from PIL import ImageTk, Image
 import os
 import hashlib
+import webbrowser
 
 
 os.system("python Password_Database_2.py")
@@ -29,7 +30,7 @@ class Application(tk.Tk):
         master.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (Frame_Login, Frame_Register, Frame_Verify,Frame_0, Frame_1, Frame_2, Frame_3, Frame_4, Frame_5):
+        for F in (Frame_Login, Frame_Register, Frame_Verify, Frame_1, Frame_2, Frame_3, Frame_4, Frame_5):
             frame_name = F.__name__
             frame = F(parent=master, controller=self)
             self.frames[frame_name] = frame
@@ -116,7 +117,7 @@ class Frame_Register(tk.Frame):
             elif entry_enter.get() != entry_2.get():
                 messagebox.showwarning("Warning", "Passwords do not match")
             else:
-                question = messagebox.askyesno("Proceed", "Are you sure you would like to preceed? The master password cannot be recovered or reset.")
+                question = messagebox.askyesno("Proceed", "Are you sure you would like to proceed? The master password cannot be recovered or reset.")
             if question == 1:
                 cursor.execute("INSERT INTO Master_password VALUES (:Password_1)",
                 {
@@ -127,7 +128,7 @@ class Frame_Register(tk.Frame):
                 import string    
                 import random 
                 ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 10))    
-                messagebox.showwarning("Backup key", "Attention! This is your one time password retrieval key. This data will not be saved. Once you reconfigure your password, this key will change:" + ran)
+                messagebox.showwarning("Backup key", "Attention! This is your one time password retrieval key. This data will not be saved anywhere on your computer" + ran)
                 messagebox.showinfo("Succes", "Master password successfully configured. I hope you enjoy the program!")
 
 
@@ -177,13 +178,6 @@ class Frame_Verify(tk.Frame):
         button_back3.pack()
 
 
-class Frame_0(tk.Frame):
-
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
-        self.controller = controller
-
-
 class Frame_1(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -195,14 +189,20 @@ class Frame_1(tk.Frame):
 
         label_title = tk.Label(self, text="Password Manager",padx=0, pady=10, font=controller.title_font)
         label_title.pack()
+        img = ImageTk.PhotoImage(Image.open("mimi.jpeg"))
+        label_image = tk.Label(self, image=img)
+        label_image.image = img
+        label_image.pack()
+
+
         button_menu = tk.Button(self, text="Menu", padx=47,pady=10,font=controller.button_font, command=lambda:controller.show_frame("Frame_2"))
         button_menu.pack()
-        button_settings = tk.Button(self, text="Settings", padx=38, pady=10,font=controller.button_font, command=lambda:controller.show_frame("Frame_0"))
-        button_settings.pack()
-        button_reset = tk.Button(self, text="Reset ptogram", padx=10, pady=10, font=controller.button_font)
-        button_reset.pack()
+        def callback():
+            webbrowser.open_new("https://github.com/AlexiaNi/Pass-Manager")
         button_exit = tk.Button(self, text="Exit", padx=55, pady=10,font=controller.button_font,  command=exit_program)
         button_exit.pack()
+        button_link = tk.Button(self, text="GitHub Repository", command=callback)
+        button_link.pack()
 
 
 class Frame_2(tk.Frame):
@@ -215,7 +215,7 @@ class Frame_2(tk.Frame):
         label_1.pack()
         button_1 = tk.Button(self, text="Add record", font=controller.button_font, padx=68, pady=10, command=lambda:controller.show_frame("Frame_3"))
         button_1.pack()
-        button_2 = tk.Button(self, text="Modify/Delete record", padx=25, pady=10, font=controller.button_font, command=lambda:controller.show_frame("Frame_4"))
+        button_2 = tk.Button(self, text="Delete record", padx=58, pady=10, font=controller.button_font, command=lambda:controller.show_frame("Frame_4"))
         button_2.pack()
         button_3  = tk.Button(self,text="Show records", padx=60, pady=10, font=controller.button_font, command=lambda:controller.show_frame("Frame_5"))
         button_3.pack()
@@ -359,8 +359,6 @@ class Frame_4(tk.Frame):
 
         button_delete = tk.Button(self, text="Delete record", padx=67, pady=10, font=controller.button_font, command=delete)
         button_delete.pack()
-        button_modify = tk.Button(self, text="Modify record", padx=65, pady=10, font=controller.button_font)
-        button_modify.pack()
         button_show_records = tk.Button(self, text="Show number of records", padx=22, pady=10, font=controller.button_font, command=show_records)
         button_show_records.pack()
         button_hide_records  = tk.Button(self, text="Hide number of records", padx=25, pady=10, font=controller.button_font, command=hide_records)
@@ -453,7 +451,8 @@ class Frame_5(tk.Frame):
                     global label_value
                     print_value = ''
                     for value in values2:
-                        print_value += "Platform/Username: " + str(value[0]) + ", " + "URL: " + str(value[1]) + ", " + "Password: " + str(value[2]) + "\n" + "ID Number: " + str(value[3]) + "\n"  
+                        print_value += "Platform/Username: " + str(value[0]) + ", " + "URL: " + str(value[1]) + ", " + "Password: " + str(value[2]) + "\n" + "ID Number: " + str(value[3]) + "\n" 
+                        global label_value
                         label_value = tk.Label(self, text=print_value, pady=10, font=controller.button_font)
                         label_value.pack()
 
@@ -462,6 +461,7 @@ class Frame_5(tk.Frame):
                     connectivity.commit()
                     connectivity.close()
                     button_show_one['state'] = GUI.DISABLED
+                    button_hide_one['state'] = GUI.NORMAL
 
 
         def hide_one():
@@ -483,6 +483,7 @@ class Frame_5(tk.Frame):
         button_show_one = tk.Button(self, text="Show record", padx=30, pady=10, font=controller.button_font, command=show_one)
         button_show_one.pack()
         button_hide_one = tk.Button(self, text="Hide record", padx=34, pady=10, font=controller.button_font, command=hide_one)
+        button_hide_one['state'] = GUI.DISABLED
         button_hide_one.pack()
         button_back2 = tk.Button(self, text="Back", padx=64, pady=10, font=controller.button_font, command=lambda:controller.show_frame("Frame_2"))
         button_back2.pack()

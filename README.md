@@ -1,1 +1,2 @@
-# Pass-Manager
+# Password Manager
+# by Alexia Niculae

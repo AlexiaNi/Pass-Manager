@@ -16,3 +16,11 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    
+    Modules to import:
+    Tkinter
+    Sqlite3
+    hashlib
+    webbrowser
+    PIL
+    os

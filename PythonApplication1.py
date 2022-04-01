@@ -70,10 +70,10 @@ class Frame_Login(tk.Frame):
         self.controller = controller
 
         def verify():
-            connectivity = sqlite3.connect('Master.db')
+            connectivity = sqlite3.connect('Master_2.db')
             cursor = connectivity.cursor()
 
-            cursor.execute("""SELECT *, oid from Master_password""")
+            cursor.execute("""SELECT *, oid from Master_password_2""")
             your_mom = cursor.fetchall()
             if len(your_mom)==0:
                 messagebox.showwarning("Warning", "Please configure master password")
@@ -85,10 +85,10 @@ class Frame_Login(tk.Frame):
             connectivity.close()
 
         def register():
-            connectivity = sqlite3.connect('Master.db')
+            connectivity = sqlite3.connect('Master_2.db')
             cursor = connectivity.cursor()
 
-            cursor.execute("""Select *, oid from Master_password""")
+            cursor.execute("""Select *, oid from Master_password_2""")
             your_mom2 = cursor.fetchall()
             if len (your_mom2)==0:
                  controller.show_frame("Frame_Register")
@@ -131,28 +131,28 @@ class Frame_Register(tk.Frame):
         def configure():
             global hash_value
             hash_value = hashlib.sha256(entry_enter.get().encode('utf-8')).hexdigest()
-            connectivity = sqlite3.connect('Master.db')
+            connectivity = sqlite3.connect('Master_2.db')
             cursor = connectivity.cursor()
 
             if len(entry_enter.get())==0 or len(entry_2.get())==0:
                 messagebox.showwarning("Warning", "Must complete all available fields")
+                question=0
             elif len(entry_enter.get())<10:
                 messagebox.showwarning("Warning", "Password must be at least 10 characters long")
+                question=0
             elif entry_enter.get() != entry_2.get():
                 messagebox.showwarning("Warning", "Passwords do not match")
+                question=0
             else:
                 question = messagebox.askyesno("Proceed", "Are you sure you would like to proceed? The master password cannot be recovered or reset.")
+                
             if question == 1:
-                cursor.execute("INSERT INTO Master_password VALUES (:Password_1)",
+                cursor.execute("INSERT INTO Master_password_2 VALUES (:Password_1)",
                 {
                     'Password_1': hash_value
                 }
                 )
-                controller.show_frame("Frame_1")
-                import string    
-                import random 
-                ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = 10))    
-                messagebox.showwarning("Backup key", "Attention! This is your one time password retrieval key. This data will not be saved anywhere on your computer" + ran)
+                controller.show_frame("Frame_Login")   
                 messagebox.showinfo("Succes", "Master password successfully configured. I hope you enjoy the program!")
 
 
@@ -175,7 +175,7 @@ class Frame_Verify(tk.Frame):
 
         def verify_2():
             hash_value_2 = hashlib.sha256(entry_enter2.get().encode('utf-8')).hexdigest()
-            connectivity = sqlite3.connect('Master.db')
+            connectivity = sqlite3.connect('Master_2.db')
             cursor = connectivity.cursor()
 
             if len(entry_enter2.get())==0:
@@ -185,7 +185,7 @@ class Frame_Verify(tk.Frame):
                 entry_copyl.append(hash_value_2)
                 entry_copyt = tuple(entry_copyl)
 
-                select_3 = """SELECT * from Master_password"""
+                select_3 = """SELECT * from Master_password_2"""
                 cursor.execute(select_3)
                 your_mom3 = cursor.fetchall()
                 for moms in your_mom3:

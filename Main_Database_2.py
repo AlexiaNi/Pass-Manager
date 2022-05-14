@@ -19,10 +19,10 @@
 
 import sqlite3
 
-connectivity = sqlite3.connect('Pass_2.db')
+connectivity = sqlite3.connect('Pass.db')
 cursor = connectivity.cursor()
 
-cursor.execute("""CREATE TABLE Passes_2(
+cursor.execute("""CREATE TABLE Passes(
        Platform text,
        URL text,
        Password text     
